@@ -44,3 +44,9 @@ class TestSearch(unittest.TestCase):
             'page_size': 25,
         }
         self.assertDictEqual(expected, data)
+
+    def test_query_exclude(self):
+        s = PersonSearch(None)
+        s = s.filter(name='John Doe')
+        s = s.exclude(current_title='CEO')
+        self.assertDictEqual({'name': ['John Doe'], 'exclude_current_title': ['CEO']}, s.query)

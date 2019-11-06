@@ -26,6 +26,12 @@ class PersonSearch:
             s._facets[k].append(v)
         return s
 
+    def exclude(self, **kwargs):
+        s = self._clone()
+        for k, v in kwargs.items():
+            s._facets[f'exclude_{k}'].append(v)
+        return s
+
     def params(self, start=None, size=None):
         s = self._clone()
         if start:
