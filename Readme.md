@@ -4,13 +4,23 @@ This is a simple RocketReach client implemented in Python for doing lookups.
 ## Requirements
 Python 2.7 or 3.4+.
 
-## Dependencies
-Use pipenv to manage dependencies.
-
-Example:
+## Installation
+Install from source:
 ```
-$ cd rocketreach_python
-$ pipenv install
+$ python setup.py install
+```
+
+Note: its best to use something like pipenv or virtualenv to manage your project dependencies.
+
+Assuming this repository is clone to /tmp/rocketreach_python:
+
+```
+$ mkdir my_proj
+$ cd my_proj
+$ pipenv shell
+$ cd /tmp/rocketreach_python
+$ python setup.py install
+$ python setup.py test
 ```
 
 ## Testing
