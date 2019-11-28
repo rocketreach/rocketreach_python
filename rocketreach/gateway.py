@@ -109,8 +109,11 @@ class Gateway:
         self.post_flight(res)
         if res.status_code >= 400:
             error_msg = self._get_error_message(res)
-            if res.status_code in (401, 403):
+            if res.status_code in (401, ):
                 raise RejectedException(error_msg, ExceptionCode.InvalidApiKey)
+            elif res.status_code in (403, ):
+                raise RejectedException(error_msg, ExceptionCode.PermissionDenied)
+
             result = ErrorResult(req, res)
             result.message = error_msg
         else:
@@ -120,4 +123,8 @@ class Gateway:
 
 sandbox_gateway = Gateway(
     GatewayConfig(api_key='', environment=GatewayEnvironment.Sandbox)
+)
+
+dev_gateway = Gateway(
+    GatewayConfig(api_key=Gateway.sandbox_api_key, environment=GatewayEnvironment.Development)
 )

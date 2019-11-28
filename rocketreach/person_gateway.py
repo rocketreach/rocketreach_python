@@ -116,7 +116,7 @@ class PersonGateway:
         return result
 
     def check_status(self, ids):
-        if isinstance(ids, tuple) or isinstance(ids, list):
+        if not isinstance(ids, tuple) and not isinstance(ids, list):
             ids = [ids]
         req = requests.Request(method='GET',
                                url=self.get_url('check_status'),

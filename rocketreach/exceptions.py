@@ -1,5 +1,6 @@
 class ExceptionCode:
     InvalidApiKey = 'invalid_api_key'
+    PermissionDenied = 'permission_denied'
     InvalidParameters = 'invalid_parameters'
 
 
