@@ -1,8 +1,8 @@
 # Getting Started
-This is a simple RocketReach client implemented in Python for doing lookups.
+This is a simple Python binding for the RocketReach API (https://rocketreach.co/api).
 
 ## Requirements
-Python 2.7 or 3.4+.
+Python 3.4+.
 
 ## Installation
 Install from source:
@@ -12,7 +12,7 @@ $ python setup.py install
 
 Note: its best to use something like pipenv or virtualenv to manage your project dependencies.
 
-Assuming this repository is clone to /tmp/rocketreach_python:
+Assuming this repository is cloned to /tmp/rocketreach_python:
 
 ```
 $ mkdir my_proj
@@ -49,10 +49,11 @@ $ ./main.py -i sample/sample01.csv -o sample01_lookup_output.csv -k <YOUR API KE
 Provide your api key and environment.
 
 ```
-from rocketreach import Gateway, GatewyEnvironment, GatewayConfig
+import rocketreach
 
-rocketreach = Gateway(GatewayConfig(None, GatewyEnvironment.sandbox))
-result = rocketreach.account.get()
+config = rocketreach.GatewayConfig(None, rocketreach.GatewayEnvironment.sandbox)
+rr = rocketreach.Gateway(config)
+result = rr.account.get()
 if result.is_success:
     print(result.account)
 ```
@@ -62,8 +63,10 @@ if result.is_success:
 After configuring your gateway perform RocketReach searches:
 
 ```
-rocketreach = Gateway(GatewayConfig('api-key', GatewyEnvironment.production))
-s = rocketreach.person.search().filter(current_employer='Acme', current_title='CEO')
+import rocketreach
+
+rr = rocketreach.Gateway(rocketreach.GatewayConfig('api-key'))
+s = rr.person.search().filter(current_employer='Acme', current_title='CEO')
 result = s.execute()
 for person in result.people:
     print(person)
@@ -71,8 +74,10 @@ for person in result.people:
 
 To paginate search queries, call the `params()` method and provide a `start` and/or `size`:
 ```
-rocketreach = Gateway(GatewayConfig('api-key', GatewyEnvironment.production))
-s = rocketreach.person.search().filter(current_employer='Acme', current_title='CEO')
+import rocketreach
+
+rr = rocketreach.Gateway(rocketreach.GatewayConfig('api-key'))
+s = rr.person.search().filter(current_employer='Acme', current_title='CEO')
 s = s.params(start=11, size=25)
 result = s.execute()
 for person in result.people:
@@ -88,10 +93,12 @@ a person is gauranteed to have an `id` which can be used to check the lookup pro
 By default, the `lookup` method is blocking and will add the person to your account's lookups as well
 as poll `checkStatus` until the lookup has completed.
 ```
-rocketreach = Gateway(GatewayConfig('api-key', GatewyEnvironment.production))
-result = rocketreach.person.lookup(person_id=123)
+import rocketreach
+
+rr = rocketreach.Gateway(rocketreach.GatewayConfig('api-key'))
+result = rr.person.lookup(person_id=123)
 print(result.person)
-result = rocketreach.person.lookup(linkedin_url='https://www.linkedin.com/in/john-doe-example')
+result = rr.person.lookup(linkedin_url='https://www.linkedin.com/in/john-doe-example')
 print(result.person)
 ```
 
@@ -107,9 +114,12 @@ When calling `checkStatus` keep in mind that tight loops are best avoided, and m
 error, indicated by a 429 status code. If a request fails with that status code, you can check the error
 message to see how long to wait for your next request -- usually just a few seconds.
 ```
-result = rocketreach.person.lookup(person_id=123, block=False)
+import rocketreach
+
+rr = rocketreach.Gateway(rocketreach.GatewayConfig('api-key'))
+result = rr.person.lookup(person_id=123, block=False)
 while result.status != PersonLookupStatus.complete:
-    result = rocketreach.person.check_status([result.person.id])
+    result = rr.person.check_status([result.person.id])
     if not result.is_success and result.response.status_code == 429:
         time.sleep(1)
 ```
