@@ -5,22 +5,10 @@ This is a simple Python binding for the RocketReach API (https://rocketreach.co/
 Python 3.4+.
 
 ## Installation
-Install from source:
-```
-$ python setup.py install
-```
-
-Note: its best to use something like pipenv or virtualenv to manage your project dependencies.
-
-Assuming this repository is cloned to /tmp/rocketreach_python:
+You can install this package using pip:
 
 ```
-$ mkdir my_proj
-$ cd my_proj
-$ pipenv shell
-$ cd /tmp/rocketreach_python
-$ python setup.py install
-$ python setup.py test
+$ pip install rocketreach
 ```
 
 ## Testing
@@ -42,11 +30,18 @@ A sample csv is included in the sample directory. You can run it by
 $ ./main.py -i sample/sample01.csv -o sample01_lookup_output.csv -k <YOUR API KEY HERE>
 ```
 
-## Examples
 
-### Setup
+## Setup
+Sign up for RocketReach at https://rocketreach.co/signup.
 
-Provide your api key and environment.
+Documentation for the API and python bindings available at the official API documentation page: https://rocketreach.co/api.
+
+# Usage
+
+## Configuration
+
+Provide your api key and environment to get started. The default environment, production is usually sufficient to get started.
+If you want to use the test key, leave the API key parameter blank or `None` and set the environment to Sandbox.
 
 ```
 import rocketreach
@@ -58,7 +53,7 @@ if result.is_success:
     print(result.account)
 ```
 
-### Searches
+## Searches
 
 After configuring your gateway perform RocketReach searches:
 
@@ -84,7 +79,7 @@ for person in result.people:
     print(person)
 ```
 
-### Lookups
+## Lookups
 
 To lookup a person, provide an `id` or `linkedin_url`. Note that not all people will have an `id`, so be sure
 to allow the flexibility to use either attribute. At least one is garuanteed to exist. After a succesful lookup,
@@ -102,7 +97,7 @@ result = rr.person.lookup(linkedin_url='https://www.linkedin.com/in/john-doe-exa
 print(result.person)
 ```
 
-### Check Status
+## Check Status
 
 If you prefer not to block on lookups, pass `block=False` and use the `checkStatus` method manually.
 Note that RocketReach does not block the lookup API endpoint, instead the system will mark the lookup as
@@ -113,6 +108,7 @@ Using `checkStatus` is the easiest way to find when the person's contact informa
 When calling `checkStatus` keep in mind that tight loops are best avoided, and may result in a rate limiting
 error, indicated by a 429 status code. If a request fails with that status code, you can check the error
 message to see how long to wait for your next request -- usually just a few seconds.
+
 ```
 import rocketreach
 
