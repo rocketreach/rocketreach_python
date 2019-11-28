@@ -18,7 +18,7 @@ class GatewayEnvironment:
 
 class GatewayConfig(NamedTuple):
     api_key: str
-    environment: str
+    environment: str = GatewayEnvironment.Production
     version: int = 2
     host: str = None
     port: int = None
