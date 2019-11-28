@@ -57,19 +57,20 @@ class PersonGateway:
             interval = self.default_polling_interval
         complete_lookups = {}
         failures = 0
+        poll_profiles = lookups[:]
         while True:
             poll_ids = set()
-            for person in lookups:
+            for person in poll_profiles:
+                complete_lookups[person.id] = person
                 if person.status != PersonLookupStatus.Complete:
                     poll_ids.add(person.id)
-                    complete_lookups[person.id] = person
-            result = self.check_status(poll_ids)
-            if result.is_success:
-                lookups = result.people
-            else:
-                failures += 1
             if not poll_ids:
                 break
+            result = self.check_status(poll_ids)
+            if result.is_success:
+                poll_profiles = result.people
+            else:
+                failures += 1
             time.sleep(interval)
 
         res = PersonCollection()
@@ -85,7 +86,7 @@ class PersonGateway:
             if result.is_success:
                 person = Person(result.data)
                 if block:
-                    result.person = self.poll_until_complete([person])
+                    result.person = self.poll_until_complete([person])[0]
                 else:
                     result.person = person
                 return result
