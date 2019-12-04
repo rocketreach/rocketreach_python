@@ -31,6 +31,6 @@ setup(
     install_requires=['requests>=2.2', ],
     project_urls={
         'Documentation': 'https://rocketreach.co/api',
-        'Source Code': 'https://github.com/punihaol/rocketreach_python',
+        'Source Code': 'https://github.com/rocketreach/rocketreach_python',
     },
 )
