@@ -134,11 +134,13 @@ class PersonGateway:
 
     def to_search_body(self, search: PersonSearch) -> dict:
         query = search.query
-        return {
+        data = {
             'query': query,
             'start': search.start,
             'page_size': search.size,
         }
+        data.update(search.get_options())
+        return data
 
     def execute_search(self, search):
         if self.gateway.version == 1:

@@ -6,6 +6,7 @@ class PersonSearch:
         self.gateway = person_gateway
         self.start = 1
         self.size = 10
+        self._options = {}
         self._facets = defaultdict(list)
 
     @property
@@ -18,6 +19,9 @@ class PersonSearch:
     def _clone(self):
         s = self.__class__(self.gateway)
         s._facets = self._facets.copy()
+        s.start = self.start
+        s.size = self.size
+        s._options = self._options.copy()
         return s
 
     def filter(self, **kwargs):
@@ -30,6 +34,14 @@ class PersonSearch:
         s = self._clone()
         for k, v in kwargs.items():
             s._facets[f'exclude_{k}'].append(v)
+        return s
+
+    def get_options(self) -> dict:
+        return self._options
+
+    def options(self, **kwargs):
+        s = self._clone()
+        s._options.update(kwargs)
         return s
 
     def params(self, start=None, size=None):
