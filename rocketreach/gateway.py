@@ -28,7 +28,9 @@ class GatewayConfig(NamedTuple):
 class Gateway:
     sandbox_api_key = '3e7k0123456789abcdef0123456789abcdef'
 
-    def __init__(self, config: GatewayConfig):
+    def __init__(self, config: GatewayConfig=None, api_key=None):
+        if config is None:
+            config = GatewayConfig(api_key=api_key)
         self.session = requests.Session()
         self.api_key = config.api_key
 

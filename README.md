@@ -53,6 +53,13 @@ if result.is_success:
     print(result.account)
 ```
 
+Or use the short-hand arguments and use the default `GatewayConfig`:
+
+```
+import rocketreach
+rr = rocketreach.Gateway(api_key='my-api-key')
+```
+
 ## Searches
 
 After configuring your gateway perform RocketReach searches:
