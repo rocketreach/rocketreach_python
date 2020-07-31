@@ -104,14 +104,14 @@ class PersonGateway:
                 else:
                     return result
 
-    def lookup(self, person_id=None, linkedin_url=None, block=True, extras={}) -> Union[ErrorResult, SuccessfulResult]:
+    def lookup(self, person_id=None, linkedin_url=None, block=True, **kwargs) -> Union[ErrorResult, SuccessfulResult]:
         if person_id:
-            extras['id'] = int(person_id)
+            kwargs['id'] = int(person_id)
         if linkedin_url:
-            extras['linkedin_url'] = linkedin_url
+            kwargs['linkedin_url'] = linkedin_url
         req = requests.Request(method='GET',
                                url=self.get_url('lookup'),
-                               params=extras)
+                               params=kwargs)
         result = self._execute_lookup(req, block)
         return result
 

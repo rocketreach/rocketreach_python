@@ -15,6 +15,25 @@ class TestSearch(unittest.TestCase):
         }
         self.assertDictEqual(data, expected)
 
+    def test_slice(self):
+        with self.subTest('Stop only'):
+            s = PersonSearch(None)
+            s = s[:10]
+            self.assertEqual(s.start, 1)
+            self.assertEqual(s.limit, 10)
+        
+        with self.subTest('Start Only'):
+            s = PersonSearch(None)
+            s = s[2:]
+            self.assertEqual(s.start, 3)
+            self.assertEqual(s.limit, None)
+        
+        with self.subTest('Start and stop'):
+            s = PersonSearch(None)
+            s = s[11:99]
+            self.assertEqual(s.start, 12)
+            self.assertEqual(s.limit, 88)
+
     def test_query_name(self):
         s = PersonSearch(None)
         s = s.filter(name='John Doe')
