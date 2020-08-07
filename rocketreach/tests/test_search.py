@@ -64,6 +64,30 @@ class TestSearch(unittest.TestCase):
         }
         self.assertDictEqual(expected, data)
 
+    def test_query_list_facets(self):
+        expected = {
+            'name': ['John Doe', 'Jane Doe'],
+        }
+        with self.subTest('combined filter'):
+            s = PersonSearch(None)
+            s = s.filter(name=['John Doe', 'Jane Doe'])
+            self.assertDictEqual(expected, s.query)
+        with self.subTest('separate filter'):
+            s = PersonSearch(None)
+            s = s.filter(name='John Doe').filter(name='Jane Doe')
+            self.assertDictEqual(expected, s.query)
+        expected = {
+            'exclude_name': ['John Doe', 'Jane Doe'],
+        }
+        with self.subTest('combined exclude'):
+            s = PersonSearch(None)
+            s = s.exclude(name=['John Doe', 'Jane Doe'])
+            self.assertDictEqual(expected, s.query)
+        with self.subTest('separate filter'):
+            s = PersonSearch(None)
+            s = s.exclude(name='John Doe').exclude(name='Jane Doe')
+            self.assertDictEqual(expected, s.query)
+
     def test_query_exclude(self):
         s = PersonSearch(None)
         s = s.filter(name='John Doe')

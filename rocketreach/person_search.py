@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Iterable
 from .exceptions import RocketReachException, ExceptionCode
 
 
@@ -55,16 +55,25 @@ class PersonSearch:
         s._options = self._options.copy()
         return s
 
+    def _make_iterable(self, arg):
+        if isinstance(arg, str):
+            result = [arg]
+        elif isinstance(arg, Iterable):
+            result = arg
+        else:
+            result = [arg]
+        return result
+
     def filter(self, **kwargs):
         s = self._clone()
         for k, v in kwargs.items():
-            s._facets[k].append(v)
+            s._facets[k].extend(self._make_iterable(v))
         return s
 
     def exclude(self, **kwargs):
         s = self._clone()
         for k, v in kwargs.items():
-            s._facets[f'exclude_{k}'].append(v)
+            s._facets[f'exclude_{k}'].extend(self._make_iterable(v))
         return s
 
     def get_options(self) -> dict:
