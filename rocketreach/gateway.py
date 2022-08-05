@@ -75,7 +75,7 @@ class Gateway:
 
     def get_url(self, path: str):
         path = path.rstrip('/').lstrip('/')
-        return f'{self.url_prefix}/{path}/'
+        return f'{self.url_prefix}/{path}'
 
     def preflight(self, req: Request):
         req.headers = self.get_headers()
