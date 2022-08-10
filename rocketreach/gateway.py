@@ -71,7 +71,7 @@ class Gateway:
         if self.version == 1:
             self.url_prefix = f'{self.url_prefix}/v1/api'
         else:
-            self.url_prefix = f'{self.url_prefix}/api/v2'
+            self.url_prefix = f'{self.url_prefix}/v2/api'
 
     def get_url(self, path: str):
         path = path.rstrip('/').lstrip('/')
