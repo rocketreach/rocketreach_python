@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 import requests
 
 
@@ -21,7 +23,10 @@ class ErrorResult:
     def __init__(self, request: requests.Request, response: requests.Response):
         self.request = request
         self.response = response
-        self.errors = response.json()
+        try:
+            self.errors = response.json()
+        except JSONDecodeError:
+            self.errors = {}
         self.message = None
 
     @property
