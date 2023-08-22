@@ -18,7 +18,7 @@ class PersonLookupStatus:
 
 
 class PersonGateway:
-    default_polling_interval = 5
+    default_polling_interval = 1
 
     def __init__(self, gateway):
         self.gateway = gateway
