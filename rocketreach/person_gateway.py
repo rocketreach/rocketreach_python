@@ -92,11 +92,7 @@ class PersonGateway:
                 return result
             else:
                 if result.response.status_code == 429:
-                    m = re.search(r'Expected available in (\d+) second', result.message).group(1)
-                    if m:
-                        wait = int(m)
-                    else:
-                        wait = 2
+                    wait = get_retry_wait_time(result.response)
                     if block:
                         time.sleep(wait)
                     else:
@@ -159,3 +155,10 @@ class PersonGateway:
             for entry in result.data['profiles']:
                 result.people.append(Person(entry))
         return result
+
+
+def get_retry_wait_time(response: requests.Response) -> int:
+    try:
+        return int(response.headers["retry-after"])
+    except Exception:
+        return 2
