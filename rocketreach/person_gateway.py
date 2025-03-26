@@ -4,7 +4,7 @@ from typing import Union
 
 import requests
 
-from rocketreach.exceptions import RocketReachException
+from rocketreach.exceptions import RocketReachException, ExceptionCode
 from rocketreach.person import Person, PersonCollection
 from rocketreach.person_search import PersonSearch
 from rocketreach.result import ErrorResult, SuccessfulResult
@@ -96,7 +96,7 @@ class PersonGateway:
                     if block:
                         time.sleep(wait)
                     else:
-                        raise RocketReachException(f'Lookups are rate-limited for {wait} seconds.')
+                        raise RocketReachException(f'Lookups are rate-limited for {wait} seconds.', ExceptionCode.Other)
                 else:
                     return result
 
