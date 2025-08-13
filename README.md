@@ -1,3 +1,5 @@
+_NOTE_: we reconfigured this repository to switch its default branch from `master` to `main` on 2025/08/13.  Update downstream forks accordingly.
+
 # Getting Started
 This is a simple Python binding for the RocketReach API (https://rocketreach.co/api).
 
