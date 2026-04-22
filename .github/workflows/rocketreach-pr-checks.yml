@@ -1,0 +1,14 @@
+name: RocketReach PR Checks
+on:
+  pull_request:
+    branches: ["main"]
+    types: ["opened", "synchronize", "reopened", "edited"]
+
+jobs:
+  rocketreach-pr-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: rocketreach/github-actions/rr-pr-checks@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
