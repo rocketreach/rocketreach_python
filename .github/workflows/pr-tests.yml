@@ -1,0 +1,47 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pr-tests:
+    name: PR Tests
+    needs: [run_python_tests]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rocketreach/github-actions/testing/pr-tests@main
+        with:
+          needs: ${{ toJSON(needs) }}
+
+  run_python_tests:
+    strategy:
+      matrix:
+        python_version: ["3.13", "3.12"]
+    name: Run Python Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: rocketreach/github-actions/github/checkout@main
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: rocketreach/github-actions/python/setup-python@main
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install package and test dependencies
+        run: pip install -e . pytest
+
+      # test_integration.py targets a localhost:8000 dev server that is not
+      # available on CI runners; run the unit tests only.
+      - name: Test with pytest
+        run: pytest rocketreach/tests/test_resource.py rocketreach/tests/test_search.py -v
