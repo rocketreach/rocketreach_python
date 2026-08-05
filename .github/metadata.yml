@@ -1,0 +1,3 @@
+# https://app.getguru.com/card/cALkkpLi/Repository-Metadata
+exempt_no_third_party_gha:
+  - "*"
