@@ -1,0 +1,4 @@
+type: PRODUCT
+artifact: Library-Python
+build: pip
+installed_to: N/A
